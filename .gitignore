@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 node_modules/
+=======
+# Dependency directories
+node_modules/
+>>>>>>> 8be7d7df7001361a6b038435d0ebb668264d23fa
 yarn.lock

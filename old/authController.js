@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -126,3 +127,13 @@ try{
 
 
 module.exports = app => app.use('/auth', router);
+=======
+class AuthController {
+  async authenticate(req, res) {
+
+  }  
+
+}
+
+module.exports = new AuthController()
+>>>>>>> 8be7d7df7001361a6b038435d0ebb668264d23fa
