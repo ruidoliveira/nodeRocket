@@ -1,86 +1,77 @@
-const express = require('express')
-const authMiddleware = require('../middlewares/auth')
+class ProjectController {
+    async findProject(req, res) {
+        try {
+            const project = await Project.findById(req.params.projectId).populate('user');
 
-const Project = require("../models/project");
-const Task = require("../models/task");
-
-const router = express.Router();
-router.use(authMiddleware);
-
-async findProject(req, res){
-    try{
-        const project = await Project.findById(req.params.projectId).populate('user');
-        
-        return res.send({project});
-     }catch(err){
-         return res.sendStatus(400).send({error: 'Error loading project'});
-     }
- };
-};
-
-router.get('/:projectId', async (req, res)=>{
-    res.send({user: req.userId});
-});
-
-async newProject(req, res){
-    try{
-        const {title, description, tasks} = req.body;
-
-       const project = await Project.create(...req.body, user: req.userId);
-       
-       await Promise.all(tasks.map(task =>{
-        const projectTask = new Task({...task, project: project._id})
-        
-        await projectTask.save();
-
-        project.tasks.push(projectTask);
-       }));
-
-        await project.save();
-       return res.send({project});
-    }catch(err){
-        return res.sendStatus(400).send({error: 'Error creating new project'});
+            return res.send({ project });
+        } catch (err) {
+            return res.sendStatus(400).send({ error: 'Error loading project' });
+        }
     }
-});
 
-async loadingProject(req, res){
-    try{
-        const{title, description, tasks} = req.body;
-        
-        const project = await Project.findByIdAndUpdate(req.params.projectId, {
-            title,
-            description
-        }, {new: true});
+    async findProjectById(req, res) {
+        try {
+            return res.json({ msg: 'fazer este metodo' });
+        } catch (err) {
+            return res.sendStatus(400).send({ error: 'Error loading project' });
+        }
+    }
 
-        project.tasks = [];
-        await Task.remove({project: project._id});
-        
-        await Promise.all(task.map(async task => {
-        
-        const projectTask = new Task ({...task, project: project._id});
-        
-        await projectTask.save();
+    async create(req, res) {
+        try {
+            const { title, description, tasks } = req.body;
 
-        project.tasks.push(projectTask);
+            const project = await Project.create({ ...req.body, user: req.userId });
 
-        }));    
+            await Promise.all(tasks.map(task => {
+                const projectTask = new Task({ ...task, project: project._id })
+                project.tasks.push(projectTask);
+            }));
 
+            await project.save();
+            return res.send({ project });
+        } catch (err) {
+            return res.sendStatus(400).send({ error: 'Error creating new project' });
+        }
+    }
 
-        return res.send({project});
-     }catch(err){
-         return res.sendStatus(400).send({error: 'Error loading project'});
-     }
-};
+    async delete(req, res) {
+        try {
+            await Project.findByIdAndRemove(req.params.projectId);
+            return res.status(204);
+        } catch (err) {
+            return res.sendStatus(400).send({ error: 'Error deleting project' });
+        }
+    }
 
-async deleteProjeto(req, res){
-    try{
-        await Project.findByIdAndRemove(req.params.projectId);
-        
-        return res.send();
-     }catch(err){
-         return res.sendStatus(400).send({error: 'Error deleting project'});
-     }
- };
+    async update(req, res) {
+        try {
+            const { title, description, tasks } = req.body;
 
+            const project = await Project.findByIdAndUpdate(req.params.projectId, {
+                title,
+                description,
+                tasks
+            }, { new: true });
 
-module.exports = app => app.use('/projects', router);
+            project.tasks = [];
+            await Task.remove({ project: project._id });
+
+            await Promise.all(task.map(async task => {
+
+                const projectTask = new Task({ ...task, project: project._id });
+
+                await projectTask.save();
+
+                project.tasks.push(projectTask);
+
+            }));
+
+            return res.send({ project });
+        } catch (err) {
+            return res.sendStatus(400).send({ error: 'Error loading project' });
+        }
+    };
+}
+
+module.exports = new ProjectController()

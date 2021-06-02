@@ -1,24 +1,28 @@
-const {Router} = require('express');
+const { Router } = require('express');
 
-const UserController = requiere('src/app/controllers/userController');
-const AuthController = require('src/app/controllers/authController2');
-const ProjectController = require('src/app/controllers/projectController');
+const UserController = require('../app/controllers/userController');
+const AuthController = require('../app/controllers/authController');
+const ProjectController = require('../app/controllers/projectController');
 
-const routes = newRouter();
+const routes = new Router();
 
-​// UserController
-routes.post('/users',UserController.create);
+module.exports = () => {
 
-// AuthController
-routes.post('/register',AuthController.create);
-routes.post('/reset_password',AuthController.create);
-routes.post('/forgot_password',AuthController.create);
-routes.post('/authenticate',AuthController.create);
+  // UserController
+  routes.post('/user/users', UserController.create);
+  routes.get('/user/find', UserController.find);
 
-// ProjectController
-routes.delete('/:projectId',ProjectController.create);
-routes.put('/:projectId',ProjectController.create);
-routes.post('/',ProjectController.create);
-routes.get('/:projectId',ProjectController.create);
+  // AuthController
+  routes.post('/auth/reset_password', AuthController.resetPassword);
+  routes.post('/auth/forgot_password', AuthController.forgotPassword);
+  routes.post('/auth/authenticate', AuthController.login);
+
+  // ProjectController
+  routes.delete('/project/:projectId', ProjectController.delete);
+  routes.put('/project/:projectId', ProjectController.update);
+  routes.post('/project/', ProjectController.create);
+  routes.get('/project/:projectId', ProjectController.findProjectById);
+
+}
 
 
