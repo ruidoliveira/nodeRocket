@@ -3,11 +3,11 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const mailer = require('../../modules/mailer');
+const mailer = require('../src/modules/mailer');
 
 const authConfig = require('../../config/auth');
 
-const User = require('../models/user');
+const User = require('../src/app/models/user');
 
 const router = express.Router();
 

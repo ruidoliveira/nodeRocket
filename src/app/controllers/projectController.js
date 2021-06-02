@@ -7,7 +7,7 @@ const Task = require("../models/task");
 const router = express.Router();
 router.use(authMiddleware);
 
-router.get('/', async (req, res)=>{
+async findProject(req, res){
     try{
         const project = await Project.findById(req.params.projectId).populate('user');
         
@@ -15,14 +15,14 @@ router.get('/', async (req, res)=>{
      }catch(err){
          return res.sendStatus(400).send({error: 'Error loading project'});
      }
- });
-});
+ };
+};
 
 router.get('/:projectId', async (req, res)=>{
     res.send({user: req.userId});
 });
 
-router.post('/', async (req, res)=>{
+async newProject(req, res){
     try{
         const {title, description, tasks} = req.body;
 
@@ -43,7 +43,7 @@ router.post('/', async (req, res)=>{
     }
 });
 
-router.put('/:projectId', async (req, res)=>{
+async loadingProject(req, res){
     try{
         const{title, description, tasks} = req.body;
         
@@ -70,9 +70,9 @@ router.put('/:projectId', async (req, res)=>{
      }catch(err){
          return res.sendStatus(400).send({error: 'Error loading project'});
      }
-});
+};
 
-router.delete('/:projectId', async (req, res)=>{
+async deleteProjeto(req, res){
     try{
         await Project.findByIdAndRemove(req.params.projectId);
         
@@ -80,7 +80,7 @@ router.delete('/:projectId', async (req, res)=>{
      }catch(err){
          return res.sendStatus(400).send({error: 'Error deleting project'});
      }
- });
+ };
 
 
 module.exports = app => app.use('/projects', router);
