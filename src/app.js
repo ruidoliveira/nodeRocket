@@ -8,7 +8,7 @@ class App {
   }
 
   routes() {
-    routes(this.express)
+    this.server.use(routes);
   }
 }
 
