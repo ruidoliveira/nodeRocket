@@ -8,8 +8,13 @@ const routes = new Router();
 
 module.exports = () => {
 
+  routes.get('/OK', (req, res)=>
+  res.json('ok')
+  )
+
+
   // UserController
-  routes.post('/user/users', UserController.create);
+  routes.post('/user', UserController.create);
   routes.get('/user/find', UserController.find);
 
   // AuthController

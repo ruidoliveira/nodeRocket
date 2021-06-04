@@ -1,9 +1,10 @@
+const userRepository = require('../repository/userRepository');
 const UserRepository = require('../repository/userRepository');
 class UserController {
   async create(req, res) {
     const { email } = req.body;
     try {
-      if (await User.findOne({ email }))
+      if (await userRepository.findOne({ email }))
         return res.status(400).send({ error: 'User already exists' });
 
       const user = await UserRepository.create(req.body);
